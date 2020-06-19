@@ -66,7 +66,9 @@ bool Lora_Module::send(uint8_t *buffer, int len) {
     return err;
   }
   else {
-    Serial.println("Error sending message :(");
+    modem.beginPacket();
+    modem.write(buffer, len);
+    err = modem.endPacket(true);
     return err;                                     //retourne un 1 si c'est positif ou un 0 si c'est négatif
   }
 }
