@@ -75,6 +75,7 @@ Librairies à installer :
 - Adafruit Sensor (s'installe normalement avec Adafruit MMA8451)
 - MKRWAN 
 - ArduinoLowPower
+- RTCZero
 
 Pour installer les librairies ouvrir le gestionnaire grâce à CTRL+MAJ+I ou Croquis -> Inclure une Blibliothèque -> Gérer les Blibliothèques.
 Rechercher dans la barre de recherche le nom de la blibliothèque à installer.
