@@ -13,8 +13,8 @@
 
 Lora_Module lora;
 Conversion conv;
-int32_t latitude = conv.float_int32("0.010101", 5);   //coordonnées par defauts
-int32_t longitude = conv.float_int32("0.101010", 5);
+int32_t latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
+int32_t longitude = conv.float_int32("3.930729", 5);
 //------------------------fin lora-----------------------------------
 
 Adafruit_GPS GPS(&GPSSerial);
@@ -337,9 +337,9 @@ void infoGPS(void)
     //  Serial.print(", ");
      // Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
      //     Serial.print("Location (in degrees, works with Google Maps): ");
-     //   Serial.print(GPS.latitudeDegrees, 4);
-     //   Serial.print(", "); 
-     //   Serial.println(GPS.longitudeDegrees, 4);
+       Serial.print(GPS.latitudeDegrees, 4);
+        Serial.print(", "); 
+        Serial.println(GPS.longitudeDegrees, 4);
 
     //  Serial.print("Speed (knots): "); Serial.println(GPS.speed);
     //  Serial.print("Angle: "); Serial.println(GPS.angle);
