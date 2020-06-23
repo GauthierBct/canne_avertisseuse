@@ -241,7 +241,7 @@ void SENDALL()
   buffer[7] = (uint8_t)(latitude >> 8);
   buffer[8] = (uint8_t)latitude;
   errorsendA = lora.send(buffer, 9);
-  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
+//  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
   
   delay(50);
   digitalWrite(PinLEDSENDMSG, LOW);
@@ -272,7 +272,7 @@ void SENDVIE()
    buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
    
   errorsendB =lora.send(buffer, 1); 
-  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
+//  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
   
   delay(50);
   digitalWrite(PinLEDSENDMSG, LOW); 
