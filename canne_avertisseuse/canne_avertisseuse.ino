@@ -254,9 +254,10 @@ void SENDVIE()
   
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
- if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
+// if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
 
-} else  if(batterie < seuil_critique) { //si la batterie est vide on envoie l'alerte sinon on envoie le msg vie 
+//} else 
+if(batterie < seuil_critique) { //si la batterie est vide on envoie l'alerte sinon on envoie le msg vie 
   alerte=alerte_BAT;
                       // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
 } else
