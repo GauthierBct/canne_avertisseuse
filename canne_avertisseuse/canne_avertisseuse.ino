@@ -1,6 +1,6 @@
 //interuptions + GPS
 //messages LoRa
-//lecture batterie
+//lecture batterie + alerte batterie GPS
  
 #include <ArduinoLowPower.h>
 #include "MMA8451_IRQ.h"
@@ -66,7 +66,7 @@ void setup() {
   digitalWrite(PinLEDMMA, LOW);
   
   Serial.begin(9600);
-  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
   Serial.println("- Serial start");
 
 //-------------------------------------------------------------LoRa initialisation-------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ do {
  
   SENDALL();
   mma.clearInterrupt(); //au cas ou il y a eu detection de mouvement pendant la recherge cela l'anulle (meme s'il n'y a aucune conséquance sur l'envoie de nv msg)
-  Serial.println("start V7.5");
+  Serial.println("start V7.6");
 }
 
 void loop()
@@ -257,13 +257,15 @@ void SENDVIE()
 // if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
 
 //} else 
-if(batterie < seuil_critique) { //si la batterie est vide on envoie l'alerte sinon on envoie le msg vie 
-  alerte=alerte_BAT;
+  if(batterie < seuil_critique || !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
+    alerte=alerte_BAT;
+    SENDALL();
+    alerte_BATP=true; //on a envoyé un message donc la prochaine fois on ne l'envera pas 
                       // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
-} else
-{
+  } else
+  {
   alerte=alerte_VIE;
-}
+//}
 
    Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
 
@@ -277,7 +279,7 @@ if(batterie < seuil_critique) { //si la batterie est vide on envoie l'alerte sin
   
   delay(50);
   digitalWrite(PinLEDSENDMSG, LOW); 
-  alerte=alerte_VIE;
+  }
 }
 
 /*

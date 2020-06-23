@@ -29,6 +29,7 @@ uint8_t batterie;
 bool SEND_ALL = 0;
 bool alarmOccurredEAUP = true;
 bool alarmOccurredMOVP = true;
+bool alerte_BATP=false;
 //bool etatledGPS = false;
 //bool TRAMEGPS = false;
 bool GPS_ENABLE = false;
