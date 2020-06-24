@@ -10,7 +10,7 @@ Ce programme ne fonctionne quand présence d'une horloge externe
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
 
 ## Hardware
-<img src=https://raw.githubusercontent.com/hugonad/canne_avertisseuse/nouvelle-version-sommeil/exporteagle.png width="300" />
+<img src=https://raw.githubusercontent.com/hugonad/canne_avertisseuse/nouvelle-version-sommeil/exporteagle.png width="2000" />
 
 ### Compenent
 
