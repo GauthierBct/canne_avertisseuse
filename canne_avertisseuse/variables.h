@@ -30,7 +30,7 @@ uint8_t alerte=alerte_INIT;
 uint8_t nombre = 0 ;
 uint8_t batterie;
 
-bool SEND_ALL = 0;
+//bool SEND_ALL = 0;
 bool alarmOccurredEAUP = false; //
 bool alarmOccurredMOVP = false;
 uint8_t NBCLK = 0;   //le reset est impossible, puisque l'on démare l'incrémenation de l'horloge à 1 a chaque boucle 
