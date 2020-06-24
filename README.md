@@ -4,16 +4,13 @@ Fonctionne avec la canne n°1
 Ce programme ne fonctionne quand présence d'une horloge externe
 
 ### Reste à faire : 
-- gps ??
-- accusé de réception
 - comment savoir si la canne est toujours connécté au réseau ? 
 
 # Canne-avertisseuse
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
 
 ## Hardware
-
-mettre une photo ici du circuit
+<img src=https://raw.githubusercontent.com/hugonad/canne_avertisseuse/nouvelle-version-sommeil/exporteagle.png width="300" />
 
 ### Compenent
 
