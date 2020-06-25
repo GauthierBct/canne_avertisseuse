@@ -1,10 +1,11 @@
 ### Notes
 note de cette version : 18/06/2020	V8
 Fonctionne avec la canne n°1
-Ce programme ne fonctionne quand présence d'une horloge externe
+Ce programme ne fonctionne qu'en présence d'une horloge externe. 
 
 ### Reste à faire : 
 - comment savoir si la canne est toujours connécté au réseau ? 
+- fusion de nouvelle version et nouvelle version sommeil
 
 # Canne-avertisseuse
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
