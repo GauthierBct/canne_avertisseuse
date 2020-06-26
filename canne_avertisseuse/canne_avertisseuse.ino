@@ -184,7 +184,7 @@ else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modifica
    alarmOccurredMOVP = true;
 }
 
-if(tour >= 12)
+if(tour >= 12) //12
 {
   SENDVIE();
   tour=0;
@@ -242,6 +242,7 @@ void SENDALL()
   buffer[8] = (uint8_t)latitude;
   errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
+//if(errorsendA==0) { Serial.println("erreur envoie"); }
   
   delay(50);
   digitalWrite(PinLEDSENDMSG, LOW);
@@ -257,10 +258,12 @@ void SENDVIE()
 // if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
 
 //} else 
-  if(batterie < seuil_critique || !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
+  if(batterie < seuil_critique && !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
+ //   Serial.println("batterie < seuil_critique || !alerte_BATP");
     alerte=alerte_BAT;
     SENDALL();
     alerte_BATP=true; //on a envoyé un message donc la prochaine fois on ne l'envera pas 
+ //   Serial.println("alerte batp " + String(alerte_BATP));
                       // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
   } else
   {
