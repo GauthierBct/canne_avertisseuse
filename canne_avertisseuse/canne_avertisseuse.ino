@@ -14,8 +14,8 @@
 
 Lora_Module lora;
 Conversion conv;
-int32_t latitude = conv.float_int32("0.010101", 5);   //coordonnées par defauts
-int32_t longitude = conv.float_int32("0.101010", 5);
+int32_t latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
+int32_t longitude = conv.float_int32("3.930729", 5);
 //------------------------fin lora-----------------------------------
 
 Adafruit_GPS GPS(&GPSSerial);
