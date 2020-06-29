@@ -21,12 +21,12 @@ Adafruit_GPS GPS(&GPSSerial);
 MMA8451_IRQ mma = MMA8451_IRQ();
 
 //fonctions 
-void startGPS(void);
-void lectureGPS(void);
-void infoGPS(void);
-void SENDALL(void);
-void SENDVIE(void);
-uint8_t lecture_batt(void);
+void startGPS(void);        //demarre de gps
+void lectureGPS(void);      //recherche une position gps
+void infoGPS(void);         //affiche certaines information du gps
+void SENDALL(void);         //envoie un message complet
+void SENDVIE(void);         //envoie un message vie
+uint8_t lecture_batt(void); //lecture de la tension de la batterie
 
 //fonctions exécutées lors d'une interuption
 void alarmEventEAU(void);
@@ -38,32 +38,33 @@ bool RECEPTION(void);
 
 void setup() {
 
-  pinMode(LED_BUILTIN, OUTPUT); //Pin 6
+  pinMode(PinLEDProg, OUTPUT);
   pinMode(PinLEDEAU, OUTPUT);
   pinMode(PinLEDMOV, OUTPUT);
   pinMode(PinLEDSENDMSG, OUTPUT);
   pinMode(PinLEDLoRa, OUTPUT);
   pinMode(PinLEDMMA, OUTPUT);
+  pinMode(PinLEDAlerteBat,OUTPUT);
   pinMode(GPS_EN, OUTPUT);
   digitalWrite(GPS_EN, HIGH);           //--------on démare le gps ici---------
     
 //--------------------------------tests des LEDS------------------------------------------
   Serial.println("tests des LEDS");
-  digitalWrite(LED_BUILTIN,HIGH);
+  digitalWrite(PinLEDProg,HIGH);
   digitalWrite(PinLEDEAU,HIGH);
   digitalWrite(PinLEDMOV,HIGH);
   digitalWrite(PinLEDSENDMSG,HIGH);
   digitalWrite(PinLEDLoRa, HIGH);
   digitalWrite(PinLEDMMA, HIGH);
-
+  digitalWrite(PinLEDAlerteBat, HIGH);
   delay(1000); //le temps que l'on voie des leds s'allumer
-  
-  digitalWrite(LED_BUILTIN,LOW);
+
   digitalWrite(PinLEDEAU,LOW);
   digitalWrite(PinLEDMOV,LOW);
   digitalWrite(PinLEDSENDMSG,LOW);
   digitalWrite(PinLEDLoRa, LOW);
   digitalWrite(PinLEDMMA, LOW);
+  digitalWrite(PinLEDAlerteBat, LOW);
   
   Serial.begin(9600);
 //  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
@@ -89,8 +90,26 @@ void setup() {
   mma.enableInterrupt(); // Setup the I2C accelerometer
 //***********************************************************MMA initialization*****************************************************************************************
 
-//--------------------interuptions ------------------------
+//--------------------------GPS--------------------------
+Serial.println("Start GPS");
+  startGPS();
   
+  time = millis(); 
+  
+Serial.println("Recuperation GPS");
+
+do {
+  GPS.read();
+  GPS.parse(GPS.lastNMEA());
+  Serial.println('0');
+ } while (!GPS.fix && (millis() - time) <= GPStimeout); // il faut qu'on est une position gps ou timout de 3 mins
+ 
+ digitalWrite(GPS_EN, LOW); //on etein le GPS ICI
+ Serial.println("fix? " + String(GPS.fix));
+ 
+  SENDALL();
+
+  //--------------------déclaration des interuptions------------------------
   pinMode(PinEAU, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PinEAU), alarmEventEAU, FALLING);  //antit rebont !!
   pinMode(PinMOV, INPUT_PULLUP);
@@ -98,35 +117,9 @@ void setup() {
   pinMode(PinCLK, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PinCLK), alarmEventCLK, FALLING);
   
-//--------------------------GPS--------------------------
-Serial.println("Start GPS");
-  startGPS();
-  
-  GPStime = millis(); 
-  timer = millis(); 
-  
-Serial.println("Recuperation GPS");
-
-do {
-  GPS.read();
-  GPS.parse(GPS.lastNMEA());
- 
-  if((millis() - timer) >= 1000)
-  {
-    Serial.println("attente d'un fix");
-
-    timer=millis();
-  }
- } while (!GPS.fix && (millis() - GPStime) <= GPStimeout); // il faut qu'on est une position gps ou timout de 3 mins
- 
- digitalWrite(GPS_EN, LOW); //on etein le GPS ICI
- //digitalWrite(PinLEDGPS,LOW);
- 
- Serial.println("fix? " + String(GPS.fix));
- 
-  SENDALL();
   mma.clearInterrupt(); //au cas ou il y a eu detection de mouvement pendant la recherge cela l'anulle (meme s'il n'y a aucune conséquance sur l'envoie de nv msg)
-  Serial.println("start V7.6");
+  Serial.println("start V7.7");
+  digitalWrite(PinLEDProg,LOW);
 }
 
 void loop()
@@ -136,7 +129,7 @@ void loop()
   
   if (millis() - timer >= 5000)
 {
-  digitalWrite(LED_BUILTIN,HIGH);
+  digitalWrite(PinLEDProg,HIGH);
   Serial.println("Millis");
 
   digitalWrite(PinLEDEAU,!digitalRead(PinEAU));
@@ -148,12 +141,12 @@ void loop()
   
  // Serial.println(mma.readRegister(0x0C) && 0x04);
   mma.clearInterrupt();
-  delay(100);
+  delay(10);
   
   bool flag = (mma.readRegister(0x0C) && 0x04);
   digitalWrite(PinLEDMOV,flag);
   
-  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(PinLEDProg,LOW);
   tour++;
   timer=millis();
 }
@@ -167,8 +160,8 @@ if (alarmOccurredEAU == true && alarmOccurredEAUP==false)
   alerte=alerte_EAU;
   
   SENDALL();
-   alarmOccurredEAU = false;
-   alarmOccurredEAUP = true;
+  alarmOccurredEAU = false;
+  alarmOccurredEAUP = true;
 }
 
 else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modification : else ici
@@ -177,11 +170,12 @@ else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modifica
   digitalWrite(PinLEDMOV,HIGH);
   
   alerte=alerte_MOV;
+  
   mma.enableInterrupt();
-  delay(100);
+  delay(10);
   SENDALL();
-   alarmOccurredMOV = false;
-   alarmOccurredMOVP = true;
+  alarmOccurredMOV = false;
+  alarmOccurredMOVP = true;
 }
 
 if(tour >= 12)
@@ -210,22 +204,15 @@ void alarmEventCLK (void)
 //---------------------------------------------LORA------------------------------------------------------------
 void SENDALL()
  {
-  digitalWrite(PinLEDSENDMSG, HIGH);
-  
-  //--------------------------GPS----------------------
-   if(alerte != 0){                 //quand on a une alerte=init, il n'y a pas besoins de refaire une recherge puisqu'on vient tout juste d'avoir un fix
-    digitalWrite(GPS_EN, HIGH);
-   
-    delay(50);
+ //--------------------------GPS----------------------
+  if(alerte != 0){                 //quand on a une alerte=init, il n'y a pas besoins de refaire une recherge puisqu'on vient tout juste d'avoir un fix
     lectureGPS();
-    digitalWrite(GPS_EN, LOW);
-   }
-    infoGPS();
-  //-------------------fin GPS-------------------------
+  }
+  infoGPS();
   
- batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
+  batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
-  //-----------------------fin batt------------------------------
+  digitalWrite(PinLEDSENDMSG, HIGH);
   int errorsendA;
   
   Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
@@ -243,57 +230,43 @@ void SENDALL()
   errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
   
-  delay(50);
+  delay(20);
   digitalWrite(PinLEDSENDMSG, LOW);
 }
 
 void SENDVIE()
 {
-  digitalWrite(PinLEDSENDMSG, HIGH);
   Serial.println("Send VIE");
   
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
-// if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
+  if(batterie < seuil_critique) delestage = true; 
+  digitalWrite(PinLEDAlerteBat,delestage);
 
-//} else 
-  if(batterie < seuil_critique || !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
+  if(batterie < seuil_critique && !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
     alerte=alerte_BAT;
     SENDALL();
     alerte_BATP=true; //on a envoyé un message donc la prochaine fois on ne l'envera pas 
                       // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
   } else
   {
-  alerte=alerte_VIE;
-//}
-
-   Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
-
-  int errorsendB;
-
-  uint8_t buffer[1];  
-   buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
+    alerte=alerte_VIE;
+    Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
    
-  errorsendB =lora.send(buffer, 1); 
+    digitalWrite(PinLEDSENDMSG, HIGH);
+    int errorsendB;
+
+    uint8_t buffer[1];  
+    buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
+   
+    errorsendB =lora.send(buffer, 1); 
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
   
-  delay(50);
-  digitalWrite(PinLEDSENDMSG, LOW); 
+    delay(20);
+    digitalWrite(PinLEDSENDMSG, LOW); 
   }
 }
 
-/*
-while (modem.available()) {
-    rcv[i++] = (char)modem.read();
-  }
-  Serial.print("Received: ");
-  for (unsigned int j = 0; j < i; j++) {
-    Serial.print(rcv[j] >> 4, HEX);
-    Serial.print(rcv[j] & 0xF, HEX);
-    Serial.print(" ");
-  }
-  Serial.println();
-*/
 //---------------------------------------------GPS------------------------------------------------------------
 void startGPS(){
   
@@ -352,7 +325,8 @@ void infoGPS(void)
 
 void lectureGPS(void)
 {
-  GPStime = millis(); 
+  digitalWrite(GPS_EN, HIGH);
+  time = millis(); 
 //  timer = millis();
      //si je recoit une nouvelle trame je sort de la boucle et que que son CRC est OK
   do {   //attente d'une nouvelle trame
@@ -372,16 +346,16 @@ void lectureGPS(void)
    //   Serial.println("\t CRC \t OK \t" + String(nombre) + "\t" + String(GPS.fix) + "\t" + String(GPS.satellites) + "\t" + String(GPS.speed));
 //   j'attend de recevoir deux trames bonnes pour sortir de la boucle (pb rencontré : si je prend la premire recue c'est très probable que c'est celle que j'ai reçu la derniere fois
 //  if(!GPS.fix) nombre=0;
+    //  Serial.println("attente d'un fix");
       }
     }
-  } while ((nombre<2 || !GPS.fix) && (millis() - GPStime) <= GPStimeout); //2 minutes
-
-  Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - GPStime));
+  } while ((nombre<2 || !GPS.fix) && (millis() - time) <= GPStimeout); //2 minutes
+  digitalWrite(GPS_EN, LOW);
+  Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - time));
 
   nombre=0 ;
-  longitude= conv.float_int32(GPS.longitudeDegrees, 5);  //ajout-------------------------------------------lora------------------------
-  latitude= conv.float_int32(GPS.latitudeDegrees, 5);  //ajout-------------------------------------------lora------------------------
- // digitalWrite(PinLEDGPS,LOW);
+  longitude= conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
+  latitude= conv.float_int32(GPS.latitudeDegrees, 5);  
 }
 
 uint8_t lecture_batt (void)
