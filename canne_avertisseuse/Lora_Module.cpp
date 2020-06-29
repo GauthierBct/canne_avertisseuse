@@ -56,6 +56,8 @@ void Lora_Module::info_connect() {
 
 bool Lora_Module::send(uint8_t *buffer, int len) {
   int err;
+  int i;
+  i=5;
   modem.beginPacket();
   modem.write(buffer, len);
   err = modem.endPacket(true);
@@ -66,9 +68,14 @@ bool Lora_Module::send(uint8_t *buffer, int len) {
     return err;
   }
   else {
-    modem.beginPacket();
-    modem.write(buffer, len);
-    err = modem.endPacket(true);
+    while (err<0 && i>0){
+      modem.beginPacket();
+      modem.write(buffer, len);
+      err = modem.endPacket(true);
+      i--;
+      Serial.println("error");
+      delay(500);
+    }
     return err;                                     //retourne un 1 si c'est positif ou un 0 si c'est négatif
   }
 }
