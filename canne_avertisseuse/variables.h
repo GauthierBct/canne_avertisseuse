@@ -19,9 +19,10 @@ volatile bool alarmOccurredMOV = false;
 volatile bool alarmOccurredCLK = false;
 volatile uint8_t NBalarmOccurredCLK = 0;
 
-//uint32_t timer = 0;       // setup + loop
+uint32_t time = 0;         // pour le GPS
+//uint32_t timer = 0;         // juste pour la boucle syncrone de 5 secondes
 //uint32_t temps = 0;       //que dans le loop
-uint32_t time = 0 ;      //setup + loop
+//uint32_t GPStime = 0 ; //que dans le setup
 //uint32_t FIXLED = 0;      //que dans le setup
 
 
