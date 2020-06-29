@@ -1,7 +1,7 @@
 //interuptions MOV & EAU + GPS
 //messages LoRa
 //lecture batterie
-//sommeil
+//sommeil + delestage
  
 #include <ArduinoLowPower.h>
 #include "MMA8451_IRQ.h"
@@ -28,7 +28,6 @@ void infoGPS(void);         //affiche certaines information du gps
 void SENDALL(void);         //envoie un message complet
 void SENDVIE(void);         //envoie un message vie
 uint8_t lecture_batt(void); //lecture de la tension de la batterie
-bool accuseRECEPTION(void);         //accusé de reception (en cour de dévelopement) revoie si on a bien reçu le message ou non
 
 //fonctions exécutées lors d'une interuption (ISR)
 void alarmEventEAU(void);
@@ -63,7 +62,7 @@ void setup() {
   digitalWrite(PinLEDSENDMSG,LOW);
   digitalWrite(PinLEDLoRa, LOW);
   digitalWrite(PinLEDMMA, LOW);
-  digitalWrite(PinLEDAlerteBat, HIGH);
+  digitalWrite(PinLEDAlerteBat, LOW);
   
   Serial.begin(9600);
  // while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
@@ -162,9 +161,6 @@ void loop()//-------------------------------------------------------------------
       SENDVIE();
       NBalarmOccurredCLK=0;
     }
-
- // timer=millis();
-//  digitalWrite(PINLEDProg,LOW);
   } // FIN CLK
 
 
@@ -237,7 +233,6 @@ void alarmEventCLK (void)
 //---------------------------------------------LORA------------------------------------------------------------
 void SENDALL()
  {
-  digitalWrite(PinLEDSENDMSG, HIGH);
   //--------------------------GPS----------------------
    if(alerte != 0 && !delestage){                 //quand on a une alerte=init, il n'y a pas besoins de refaire une recherge puisqu'on vient tout juste d'avoir un fix
     lectureGPS();                               // si on a plus assé de batterie on n'utilise plus le gps
@@ -245,6 +240,7 @@ void SENDALL()
   //  infoGPS();
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
+  digitalWrite(PinLEDSENDMSG, HIGH);
   int errorsendA;
   
   Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
@@ -259,46 +255,44 @@ void SENDALL()
   buffer[6] = (uint8_t)(latitude >> 16);
   buffer[7] = (uint8_t)(latitude >> 8);
   buffer[8] = (uint8_t)latitude;
-//  errorsendA = lora.send(buffer, 9);
+  errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
   
-  delay(50);
-  digitalWrite(PinLEDSENDMSG, LOW);
-  accuseRECEPTION();
+  delay(20);
+  digitalWrite(PinLEDSENDMSG, LOW);  
 }
 
 void SENDVIE()
 {
-  digitalWrite(PinLEDSENDMSG, HIGH);
-  Serial.print("Send VIE");
+  Serial.println("Send VIE");
   
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
- if (alerte == alerte_EAU || alerte == alerte_MOV) {  //si une alérte a été précédament envoyé alors on renvoie une deuxieme foit cette alerte
+  if(batterie < seuil_critique) delestage = true; 
+  digitalWrite(PinLEDAlerteBat,delestage);
 
-} else  if(batterie < seuil_critique) { //si la batterie est vide on envoie l'alerte sinon on envoie le msg vie 
-  alerte = alerte_BAT;
-  delestage = true;                    // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
-} else
-{
-  alerte = alerte_VIE;
-  delestage = false; 
-}
-digitalWrite(PinLEDAlerteBat,delestage);
+  if(batterie < seuil_critique && !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
+    alerte=alerte_BAT;
+    SENDALL();
+    alerte_BATP=true; //on a envoyé un message donc la prochaine fois on ne l'envera pas 
+                      // si batterie vide alors on rentre dans un mode dégradé (GPS désactivé) == a coder
+  } else
+  {
+    alerte=alerte_VIE;
+    Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
+   
+    digitalWrite(PinLEDSENDMSG, HIGH);
+    int errorsendB;
 
-   Serial.print("\t \t Send alerte: " + String(alerte) +"\n");
-
-  int errorsendB;
-
-  uint8_t buffer[1];  
-   buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
-// errorsendB =lora.send(buffer, 1); 
-
+    uint8_t buffer[1];  
+    buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
+   
+    errorsendB =lora.send(buffer, 1); 
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
   
-  delay(10);
-  digitalWrite(PinLEDSENDMSG, LOW); 
-  alerte=alerte_VIE;
+    delay(20);
+    digitalWrite(PinLEDSENDMSG, LOW); 
+  }
 }
 
 
@@ -414,29 +408,4 @@ uint8_t lecture_batt (void)
      val=(val*31.0)/4.0;  //on code ici les 4 Volts sur 5 bits (que l'on va décoder plus tard grace a TTN)
      return val; 
   }  
-}
-
-bool accuseRECEPTION(void)
-{
-  /*
- time = millis();
- char tableau[64];
- int i = 0;
- 
-do {
-  while (modem.available()) {
-    tableau[i++] = (char)modem.read();
-  }
- } while (!GPS.fix && (millis() - time) <= LoRatimeout);
-  
-  Serial.print("Received: ");
-  for (unsigned int j = 0; j < i; j++) {
- //   Serial.print(tableau[j] >> 4, HEX);
- //   Serial.print(tableau[j] & 0xF, HEX);
-    Serial.print(tableau[j]);
-  //  Serial.print(" ");
-  }
-  Serial.println();
-  return 
-*/
 }
