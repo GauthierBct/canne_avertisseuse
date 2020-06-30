@@ -37,6 +37,10 @@ void alarmEventCLK(void);
 bool RECEPTION(void);
 
 void setup() {
+  
+  Serial.begin(9600);
+//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+  Serial.println("- Serial start");
 
   pinMode(PinLEDProg, OUTPUT);
   pinMode(PinLEDEAU, OUTPUT);
@@ -66,10 +70,6 @@ void setup() {
   digitalWrite(PinLEDMMA, LOW);
   digitalWrite(PinLEDAlerteBat, LOW);
   
-  Serial.begin(9600);
-//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
-  Serial.println("- Serial start");
-
 //-------------------------------------------------------------LoRa initialisation-------------------------------------------------------------------------------------
   Serial.println("- LoRa initialisation ..."); 
   lora.Init();
@@ -101,7 +101,7 @@ Serial.println("Recuperation GPS");
 do {
   GPS.read();
   GPS.parse(GPS.lastNMEA());
-  Serial.println('0');
+//  Serial.println('0');
  } while (!GPS.fix && (millis() - time) <= GPStimeout); // il faut qu'on est une position gps ou timout de 3 mins
  
  digitalWrite(GPS_EN, LOW); //on etein le GPS ICI
@@ -354,8 +354,13 @@ void lectureGPS(void)
   Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - time));
 
   nombre=0 ;
-  longitude= conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
-  latitude= conv.float_int32(GPS.latitudeDegrees, 5);  
+  if(GPS.fix) {
+  longitude = conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
+  latitude = conv.float_int32(GPS.latitudeDegrees, 5);  
+  } else {
+    latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
+    longitude = conv.float_int32("3.930729", 5);
+  }
 }
 
 uint8_t lecture_batt (void)
