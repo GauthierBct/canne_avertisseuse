@@ -1,11 +1,9 @@
 ### Notes
 note de cette version : 18/06/2020	V8
-Fonctionne avec la canne n°1
 Ce programme ne fonctionne qu'en présence d'une horloge externe. 
 
 ### Reste à faire : 
 - comment savoir si la canne est toujours connécté au réseau ? 
-- fusion de nouvelle version et nouvelle version sommeil
 
 # Canne-avertisseuse
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
@@ -40,7 +38,8 @@ Ce programme ne fonctionne qu'en présence d'une horloge externe.
 * 3× terminal block connector - 0,589 € HT https://fr.rs-online.com/web/p/products/1814377/
 <img src=https://user-images.githubusercontent.com/32598441/61883918-8ef5ab80-aefb-11e9-98b9-c4e7c0803b27.jpg width="100" />
 
-* regulateur DC/DC 4,6-32V ->3,3V - 10€ HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/7553429/
+* regulateur DC/DC 4,6-32V ->3,3V - 4,68 HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/7553429/
+a remplacer par (meilleur rendement et courant de veille) 1,92 HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/1933974/
 <img src=https://user-images.githubusercontent.com/32598441/61883931-9321c900-aefb-11e9-8f70-7ebc4981d139.jpg width="100" />
 
 * Case ~15€ 
