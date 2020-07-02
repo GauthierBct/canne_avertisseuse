@@ -1,9 +1,9 @@
 ### Notes
-note de cette version : 18/06/2020	V8
+note de cette version : 30/06/2020	V8
 Ce programme ne fonctionne qu'en présence d'une horloge externe. 
 
 ### Reste à faire : 
-- comment savoir si la canne est toujours connécté au réseau ? 
+- comment savoir si la canne est toujours connectée au réseau ? 
 
 # Canne-avertisseuse
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
