@@ -4,6 +4,7 @@ note de cette version : 30/06/2020
 
 ### Reste à faire : 
 - comment savoir si la canne est toujours connectée au réseau ? 
+- ajouter 0.3 volts de la diode lors de la conversion 
 
 # Canne-avertisseuse
 "La canne_avertisseuse" is an alert system for gravity irrigation. They use LoRa to communicate and detect the presence of water  
