@@ -17,7 +17,7 @@ note de cette version : 30/06/2020
  or Arduino MKR WAN 1310 - 33€ HT https://store.arduino.cc/mkr-wan-1310
 <img src=https://user-images.githubusercontent.com/32598441/61883824-679ede80-aefb-11e9-8246-e1c03fb2b4e8.jpg width="100" />
 
-* Antenna for 868 MHZ - ~3,9€ HT https://bit.ly/2SDVVCL
+* Antenna for 868 MHZ - 3,9€ HT https://bit.ly/2SDVVCL
 <img src=https://user-images.githubusercontent.com/32598441/61883832-6a99cf00-aefb-11e9-862d-c804beff6443.jpg width="100" />
 
 * GPS Adafruit 745 - 35,53 € HT  https://bit.ly/2LHuB5R
@@ -36,11 +36,11 @@ essayer avec : Antenne GPS céramique active 3 HT (moins cher)
 
 * Plaque d'essais BCS160, 100 x 160 mm pastilles - 3,08 € HT
 
-* 3× terminal block connector - 0,589 € HT https://fr.rs-online.com/web/p/products/1814377/
+* 6× terminal block connector - 0,589 € HT https://fr.rs-online.com/web/p/products/1814377/
 <img src=https://user-images.githubusercontent.com/32598441/61883918-8ef5ab80-aefb-11e9-98b9-c4e7c0803b27.jpg width="100" />
 
 * regulateur DC/DC 4,6-32V ->3,3V - 4,68 HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/7553429/
-a remplacer par (meilleur rendement et courant de veille) 1,92 HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/1933974/
+a remplacer par (meilleur rendement et courant de veille) - 1,92 HT https://fr.rs-online.com/web/p/regulateurs-a-decoupage/1933974/
 <img src=https://user-images.githubusercontent.com/32598441/61883931-9321c900-aefb-11e9-8f70-7ebc4981d139.jpg width="100" />
 
 * Case ~15€ 
