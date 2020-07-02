@@ -23,7 +23,8 @@ Ce programme ne fonctionne qu'en présence d'une horloge externe.
 * GPS Adafruit 745 - 35,53 € HT  https://bit.ly/2LHuB5R
 <img src=https://user-images.githubusercontent.com/32598441/61883842-6e2d5600-aefb-11e9-97ed-8e78c9d13dd1.jpg width="100" />
 
-* Antenna for GPS SMA SMA960 - 13,58€ HT
+* Antenna for GPS SMA SMA960 - 13,58€ HT https://www.gotronic.fr/art-antenne-gps-sma-sma960-20941.htm + adapateur 4,08 HT https://www.gotronic.fr/art-adaptateur-ufl-sma-20893.htm
+essayer avec : Antenne GPS céramique active 3 HT (moins cher)
 
 * accelerometer Adafruit MMA8451 - 6,95€ HT https://bit.ly/2Mcii0F
 <img src=https://user-images.githubusercontent.com/32598441/61883851-71284680-aefb-11e9-8e40-f462b3d68d67.jpg width="100" />
