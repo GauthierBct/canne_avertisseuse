@@ -127,16 +127,14 @@ void loop()//-------------------------------------------------------------------
 
   if(alarmOccurredCLK) {  //interuption horloge
     
-    Serial.println("CLK : " + String(NBalarmOccurredCLK) + "\t"); 
+//    Serial.println("CLK : " + String(NBalarmOccurredCLK) + "\t"); 
     alarmOccurredCLK=false; //on reset le drapeau
   
 //  Serial.println(String(NBalarmOccurredCLK) +" == "+ String(NBCLK)); 
     if(NBalarmOccurredCLK == NBCLK) // tout les deux coup d'horloge après une interuption on reset les flags
     {
-      NBCLK=0;  Serial.println("RESET"); 
+      NBCLK=0; // Serial.println("RESET"); 
   
-      digitalWrite(PinLEDEAU,!digitalRead(PinEAU));
-
       alarmOccurredEAUP = false;
       alarmOccurredMOVP = false;
       alarmOccurredEAU = false;
@@ -148,6 +146,7 @@ void loop()//-------------------------------------------------------------------
   
       bool flag = (mma.readRegister(0x0C) && 0x04);
       digitalWrite(PinLEDMOV,flag);
+      digitalWrite(PinLEDEAU,!digitalRead(PinEAU));
     } 
   
   
@@ -161,20 +160,20 @@ void loop()//-------------------------------------------------------------------
 
   if (alarmOccurredEAU == true && alarmOccurredEAUP==false) 
   {
-    Serial.println("INTERUPTION_EAU");
+ //   Serial.println("INTERUPTION_EAU");
     digitalWrite(PinLEDEAU,HIGH);
   
     alerte=alerte_EAU;
     SENDALL();
 
-    Serial.println(NBalarmOccurredCLK);
+//    Serial.println(NBalarmOccurredCLK);
  
     if(NBCLK+NBreset > NBsendvie){ //si le nombre de coup d'horloge avant le réset est plus grand que le coup d'horloge total 
       NBCLK=NBalarmOccurredCLK+NBreset-NBsendvie;    //sachant que si c'est egal à 0 c'est imposible d'ou le +1
     } else {                        //SI NBalarmOccurredCLK+NBreset = 7 et NBsendvie = 5 :7-5 = 2
       NBCLK=NBalarmOccurredCLK+NBreset;        //si c'est pas le cas on ajoute le nombre avant reset
     }
-    Serial.println(NBCLK);
+//    Serial.println(NBCLK);
     if(NBCLK>NBsendvie) NBCLK=1; //au cas ou cela ne fonctionne pas 
   
     alarmOccurredEAU = false;
@@ -183,7 +182,7 @@ void loop()//-------------------------------------------------------------------
 
   else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modification : else ici
 
-    Serial.println("INTERUPTION_MOV");
+ //   Serial.println("INTERUPTION_MOV");
     digitalWrite(PinLEDMOV,HIGH);
   
     alerte=alerte_MOV;
@@ -191,14 +190,14 @@ void loop()//-------------------------------------------------------------------
     delay(10);
     SENDALL();
 
-    Serial.println(NBalarmOccurredCLK);
+//    Serial.println(NBalarmOccurredCLK);
   
     if(NBCLK+NBreset > NBsendvie){ //si le nombre de coup d'horloge avant le réset est plus grand que le coup d'horloge total 
       NBCLK=NBalarmOccurredCLK+NBreset-NBsendvie;    //sachant que si c'est egal à 0 c'est imposible d'ou le +1
     } else {                        //SI NBalarmOccurredCLK+NBreset = 7 et NBsendvie = 5 :7-5 = 2
       NBCLK=NBalarmOccurredCLK+NBreset;        //si c'est pas le cas on ajoute le nombre avant reset
     }
-    Serial.println(NBCLK);
+//    Serial.println(NBCLK);
     if(NBCLK>NBsendvie) NBCLK=1; //au cas ou cela ne fonctionne pas 
 
     alarmOccurredMOV = false;
@@ -238,7 +237,7 @@ void SENDALL()
   digitalWrite(PinLEDSENDMSG, HIGH);
   int errorsendA;
   
-  Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
+//  Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
 
   uint8_t buffer[9];
   buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
@@ -259,7 +258,7 @@ void SENDALL()
 
 void SENDVIE()
 {
-  Serial.println("Send VIE");
+//  Serial.println("Send VIE");
   
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
@@ -274,7 +273,7 @@ void SENDVIE()
   } else
   {
     alerte=alerte_VIE;
-    Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
+ //   Serial.print("\t \t \t Send alerte: " + String(alerte) +"\n");
    
     digitalWrite(PinLEDSENDMSG, HIGH);
     int errorsendB;
@@ -302,7 +301,7 @@ void startGPS(){
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
  
-  Serial.println("Get version!");
+//  Serial.println("Get version!");
   GPS.println(PMTK_Q_RELEASE);
 
   GPS.sendCommand(PGCMD_ANTENNA);
@@ -375,7 +374,7 @@ void lectureGPS(void)
     }
   } while ((nombre<2 || !GPS.fix) && (millis() - time) <= GPStimeout); //2 minutes
   digitalWrite(GPS_EN, LOW);
-  Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - time));
+//  Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - time));
 
   nombre=0 ;
   if(GPS.fix) {
