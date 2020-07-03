@@ -35,8 +35,12 @@ void alarmEventMOV(void);
 void alarmEventCLK(void);
 
 void setup() {
+  
+//  Serial.begin(9600);
+//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+//  Serial.println("- Serial start");
 
-  pinMode(PinLEDProg, OUTPUT); //Pin 6
+  pinMode(PinLEDProg, OUTPUT);
   pinMode(PinLEDEAU, OUTPUT);
   pinMode(PinLEDMOV, OUTPUT);
   pinMode(PinLEDSENDMSG, OUTPUT);
@@ -47,7 +51,7 @@ void setup() {
   digitalWrite(GPS_EN, HIGH);           //--------on démare le gps ici---------
     
 //--------------------------------tests des LEDS------------------------------------------
-  Serial.println("tests des LEDS");
+//  Serial.println("tests des LEDS");
   digitalWrite(PinLEDProg,HIGH);
   digitalWrite(PinLEDEAU,HIGH);
   digitalWrite(PinLEDMOV,HIGH);
@@ -56,7 +60,7 @@ void setup() {
   digitalWrite(PinLEDMMA, HIGH);
   digitalWrite(PinLEDAlerteBat, HIGH);
   delay(1000); //le temps que l'on voie des leds s'allumer
-  
+
   digitalWrite(PinLEDEAU,LOW);
   digitalWrite(PinLEDMOV,LOW);
   digitalWrite(PinLEDSENDMSG,LOW);
@@ -64,66 +68,57 @@ void setup() {
   digitalWrite(PinLEDMMA, LOW);
   digitalWrite(PinLEDAlerteBat, LOW);
   
-  Serial.begin(9600);
- // while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
-  // toute les messages sur le port série sont a enlever lors de l'utilisation finale
-  Serial.println("- Serial start");
-
 //-------------------------------------------------------------LoRa initialisation-------------------------------------------------------------------------------------
-  Serial.println("- LoRa initialisation ..."); 
-//  lora.Init();
-//  lora.info_connect(); 
+//  Serial.println("- LoRa initialisation ..."); 
+  lora.Init();
+  lora.info_connect(); 
   digitalWrite(PinLEDLoRa, HIGH);
 //************************************************************LoRa initialisation***************************************************************************************
 
 //------------------------------------------------------------MMA initialisation----------------------------------------------------------------------------------------
-  Serial.println("- MMA initialisation ..."); 
+//  Serial.println("- MMA initialisation ..."); 
   if (! mma.begin()) {
-    Serial.println("\t Couldnt start");
+  //  Serial.println("\t Couldnt start");
     digitalWrite(PinLEDMMA, LOW);
     while (1);
   }
-  Serial.println("\t MMA8451 found!");
+//  Serial.println("\t MMA8451 found!");
   digitalWrite(PinLEDMMA, HIGH);
  
   mma.enableInterrupt(); // Setup the I2C accelerometer
 //***********************************************************MMA initialization*****************************************************************************************
 
 //--------------------------GPS--------------------------
-Serial.println("Start GPS");
+//Serial.println("Start GPS");
   startGPS();
   
   time = millis(); 
   
-Serial.println("Recuperation GPS");
+//Serial.println("Recuperation GPS");
 
 do {
   GPS.read();
   GPS.parse(GPS.lastNMEA());
-  Serial.println('0');
+//  Serial.println('0');
  } while (!GPS.fix && (millis() - time) <= GPStimeout); // il faut qu'on est une position gps ou timout de 3 mins
  
  digitalWrite(GPS_EN, LOW); //on etein le GPS ICI
- 
- Serial.println("fix? " + String(GPS.fix));
+ //Serial.println("fix? " + String(GPS.fix));
  
   SENDALL();
-  
-//--------------------déclaration des interuptions ------------------------
-  
+
+  //--------------------déclaration des interuptions------------------------
   pinMode(PinEAU, INPUT_PULLUP);
-  //attachInterrupt(digitalPinToInterrupt(PinEAU), alarmEventEAU, FALLING);  //mettre un condensateur anti rebont !!
-  LowPower.attachInterruptWakeup(PinEAU, alarmEventEAU, FALLING);
+  LowPower.attachInterruptWakeup(PinEAU, alarmEventEAU, FALLING); //mettre un condensateur anti rebont !!
   pinMode(PinMOV, INPUT_PULLUP);
-  //attachInterrupt(digitalPinToInterrupt(PinMOV), alarmEventMOV, FALLING);
   LowPower.attachInterruptWakeup(PinMOV, alarmEventMOV, FALLING);
   pinMode(PinCLK, INPUT_PULLUP);
-  //attachInterrupt(digitalPinToInterrupt(PinCLK), alarmEventCLK, FALLING);
   LowPower.attachInterruptWakeup(PinCLK, alarmEventCLK, FALLING);
   
   mma.clearInterrupt(); //au cas ou il y a eu detection de mouvement pendant la recherge cela l'anulle (meme s'il n'y a aucune conséquance sur l'envoie de nv msg)
-  Serial.println("start V8");
+  //Serial.println("start V8.2");
   digitalWrite(PinLEDProg,LOW);
+
 }
 
 void loop()//-------------------------------------------------------------------------------------------------------------------------------
