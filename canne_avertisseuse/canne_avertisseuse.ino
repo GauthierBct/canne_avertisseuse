@@ -33,8 +33,6 @@ void alarmEventEAU(void);
 void alarmEventMOV(void);
 void alarmEventCLK(void);
 
-//en cour de dévelopement:
-bool RECEPTION(void);
 
 void setup() {
   
