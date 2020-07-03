@@ -10,7 +10,6 @@
 #define GPStimeout 10000 //120000 = 2 minutes
 #define NBsendvie 5 //10sec*5 = 50 sec    nombre de coup d'horloge avant le message de vie
 #define NBreset 2 //10sec*2 = 20 sec      la led reset alumé pandant 20 seconde après l'envoie du message nombre de coup d'horloge avant le reset
-#define LoRatimeout 60000 //1 minute pour recevoir un msg
 
 #define deflatitude "43.522589" //coordonnées par defauts
 #define deflongitude "3.930729"
