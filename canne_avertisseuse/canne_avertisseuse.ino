@@ -13,8 +13,8 @@
 
 Lora_Module lora;
 Conversion conv;
-int32_t latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
-int32_t longitude = conv.float_int32("3.930729", 5);
+int32_t latitude = conv.float_int32(deflatitude, 5);   //coordonnées par defauts
+int32_t longitude = conv.float_int32(deflongitude, 5);
 //------------------------fin lora-----------------------------------
 
 Adafruit_GPS GPS(&GPSSerial);
@@ -39,7 +39,7 @@ bool RECEPTION(void);
 void setup() {
   
   Serial.begin(9600);
-//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
   Serial.println("- Serial start");
 
   pinMode(PinLEDProg, OUTPUT);
@@ -120,19 +120,18 @@ do {
   mma.clearInterrupt(); //au cas ou il y a eu detection de mouvement pendant la recherge cela l'anulle (meme s'il n'y a aucune conséquance sur l'envoie de nv msg)
   Serial.println("start V7.7");
   digitalWrite(PinLEDProg,LOW);
+
 }
 
 void loop()
 {
-
+  
   if(alarmOccurredCLK) {Serial.println("CLK"); alarmOccurredCLK=false; };
   
   if (millis() - timer >= 5000)
 {
   digitalWrite(PinLEDProg,HIGH);
   Serial.println("Millis");
-
-  digitalWrite(PinLEDEAU,!digitalRead(PinEAU));
 
   alarmOccurredEAUP = false;
   alarmOccurredMOVP = false;
@@ -146,6 +145,8 @@ void loop()
   bool flag = (mma.readRegister(0x0C) && 0x04);
   digitalWrite(PinLEDMOV,flag);
   
+  digitalWrite(PinLEDEAU,!digitalRead(PinEAU));
+  
   digitalWrite(PinLEDProg,LOW);
   tour++;
   timer=millis();
@@ -156,10 +157,12 @@ if (alarmOccurredEAU == true && alarmOccurredEAUP==false)
 {
   Serial.println("INTERUPTION_EAU");
   digitalWrite(PinLEDEAU,HIGH);
+   digitalWrite(PinLEDProg,HIGH);
   
   alerte=alerte_EAU;
   
   SENDALL();
+  digitalWrite(PinLEDProg,LOW);
   alarmOccurredEAU = false;
   alarmOccurredEAUP = true;
 }
@@ -168,20 +171,24 @@ else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modifica
 
   Serial.println("INTERUPTION_MOV");
   digitalWrite(PinLEDMOV,HIGH);
+  digitalWrite(PinLEDProg,HIGH);
   
   alerte=alerte_MOV;
   
   mma.enableInterrupt();
   delay(10);
   SENDALL();
+  digitalWrite(PinLEDProg,LOW);
   alarmOccurredMOV = false;
   alarmOccurredMOVP = true;
 }
 
 if(tour >= 12)
 {
+  digitalWrite(PinLEDProg,HIGH);
   SENDVIE();
   tour=0;
+  digitalWrite(PinLEDProg,LOW);
 }
 
 //LowPower.deepSleep();
@@ -358,8 +365,8 @@ void lectureGPS(void)
   longitude = conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
   latitude = conv.float_int32(GPS.latitudeDegrees, 5);  
   } else {
-    latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
-    longitude = conv.float_int32("3.930729", 5);
+    latitude = conv.float_int32(deflatitude, 5);   //coordonnées par defauts
+    longitude = conv.float_int32(deflongitude, 5);
   }
 }
 
@@ -374,6 +381,7 @@ uint8_t lecture_batt (void)
   Serial.println("tension en volt : " + String(val));
   
   val=val/0.234;   //coef pont diviseur = 0.22 R1 = 326k, R2=100k
+  val=val+0.3;   //tension de la diode a rajouter car le pont diviseur est après celle-ci
   val=val-10.0;   //precision de 0.16 (5/31) sur 5 volts au lieus des 0.45 V (14/31)
 
   if(val<0.0)

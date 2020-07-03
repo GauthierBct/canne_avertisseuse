@@ -73,7 +73,7 @@ bool Lora_Module::send(uint8_t *buffer, int len) {
       modem.write(buffer, len);
       err = modem.endPacket(true);
       i--;
-      Serial.println("erreur : nouvel essais sans 2 secondes plus que "+ String(i));
+      Serial.println("erreur : nouvel essais dans 2 secondes plus que "+ String(i));
       delay(2000);
     }
     return err;                                     //retourne un 1 si c'est positif ou un 0 si c'est négatif
