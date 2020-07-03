@@ -37,7 +37,7 @@ void alarmEventCLK(void);
 void setup() {
   
   Serial.begin(9600);
-  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
   Serial.println("- Serial start");
 
   pinMode(PinLEDProg, OUTPUT);
@@ -181,7 +181,7 @@ else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modifica
   alarmOccurredMOVP = true;
 }
 
-if(tour >= 12)
+if(tour >= 720)
 {
   digitalWrite(PinLEDProg,HIGH);
   SENDVIE();
