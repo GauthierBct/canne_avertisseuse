@@ -378,8 +378,13 @@ void lectureGPS(void)
   Serial.println("\t fix? " + String(GPS.fix) + "\t temps mis pour trouver le fix: " + String(millis() - time));
 
   nombre=0 ;
-  longitude= conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
-  latitude= conv.float_int32(GPS.latitudeDegrees, 5);  
+  if(GPS.fix) {
+  longitude = conv.float_int32(GPS.longitudeDegrees, 5); //convertit le nombre flottant en nombre entier
+  latitude = conv.float_int32(GPS.latitudeDegrees, 5);  
+  } else {
+    latitude = conv.float_int32(deflatitude, 5);   //coordonnées par defauts
+    longitude = conv.float_int32(deflongitude, 5);
+  }
 }
 
 uint8_t lecture_batt (void)
