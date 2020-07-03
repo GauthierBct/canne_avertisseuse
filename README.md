@@ -12,7 +12,7 @@ note de cette version : 30/06/2020
 ## Hardware
 <img src=https://raw.githubusercontent.com/hugonad/canne_avertisseuse/nouvelle-version-sommeil/exporteagle.png width="2000" />
 
-### Compenent
+### Composants
 
 * Arduino MKR WAN 1300 - 35€ HT https://store.arduino.cc/arduino-mkr-wan-1300-lora-connectivity-1414
  or Arduino MKR WAN 1310 - 33€ HT https://store.arduino.cc/mkr-wan-1310
@@ -52,15 +52,7 @@ a remplacer par (meilleur rendement et courant de veille) - 1,92 HT https://fr.r
 * NE555 - 0,29€ HT
 
 * Resistors and capacitors ~2€ :
-270k,
-120k,
-100k,
-56k,
-10k,
-2,7k,
-100 µF,
-330 nF,
-100 nF
+270k, 120k, 100k, 56k, 10k, 2,7k, 100 µF, 330 nF, 100 nF
 
 * Battery PS1270GB 12V 7,0Ah - au plomb - 19,92 € HT - https://www.gotronic.fr/art-batterie-ps1270gb-5655.htm
 
