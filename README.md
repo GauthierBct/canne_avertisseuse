@@ -25,7 +25,7 @@ note de cette version : 30/06/2020
 <img src=https://user-images.githubusercontent.com/32598441/61883842-6e2d5600-aefb-11e9-97ed-8e78c9d13dd1.jpg width="100" />
 
 * Antenna for GPS SMA SMA960 - 13,58€ HT https://www.gotronic.fr/art-antenne-gps-sma-sma960-20941.htm + adapateur 4,08 HT https://www.gotronic.fr/art-adaptateur-ufl-sma-20893.htm
-essayer avec : Antenne GPS céramique active 3 HT (moins cher)
+essayer avec : Antenne GPS céramique active 3 € HT (moins cher)
 
 * accelerometer Adafruit MMA8451 - 6,95€ HT https://bit.ly/2Mcii0F
 <img src=https://user-images.githubusercontent.com/32598441/61883851-71284680-aefb-11e9-8e40-f462b3d68d67.jpg width="100" />
@@ -50,13 +50,13 @@ a remplacer par (meilleur rendement et courant de veille) - 1,92 HT https://fr.r
 * 10 leds - 0,33€ HT
 * Inverseur unipolaire ESP101 - 0,79 € HT
 * NE555 - 0,29€ HT
-
-* Resistors and capacitors ~2€ :
+* Diode Schottky 0,5 € (doit resister a une tension de 12V en inverse et 0,2 A)
+* Resistors and capacitors ~2 € :
 270k, 120k, 100k, 56k, 10k, 2,7k, 100 µF, 330 nF, 100 nF
 
 * Battery PS1270GB 12V 7,0Ah - au plomb - 19,92 € HT - https://www.gotronic.fr/art-batterie-ps1270gb-5655.htm
 
-Total = 157,75€ HT
+Total = 136,53 - 150 € HT
 
 ### Libraries
 
