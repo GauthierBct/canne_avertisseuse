@@ -14,8 +14,8 @@
 
 Lora_Module lora;
 Conversion conv;
-int32_t latitude = conv.float_int32("43.522589", 5);   //coordonnées par defauts
-int32_t longitude = conv.float_int32("3.930729", 5);
+int32_t latitude = conv.float_int32(deflatitude, 5);   //coordonnées par defauts
+int32_t longitude = conv.float_int32(deflongitude, 5);
 //------------------------fin lora-----------------------------------
 
 Adafruit_GPS GPS(&GPSSerial);
@@ -395,10 +395,11 @@ uint8_t lecture_batt (void)
   val = analogRead(PinBatt);   //on lit la tension sur la broche PinBatt
  
   val=(val*3.3)/1023.0;
- // Serial.println("tension en volt : " + String(val));
+//  Serial.println("tension en volt : " + String(val));
   
-  val=val/0.234;   //coef pont diviseur = 0.22 R1 = 326k, R2=100k
-  val=val-10.0;   //precision de 0.16 (5/31) sur 5 volts au lieus des 0.45 V (14/31)
+  val=((val/0.234)+0.3)-10.0;   //coef pont diviseur = 0.22 R1 = 326k, R2=100k
+ // val=val+0.3;   //tension de la diode a rajouter car le pont diviseur est après celle-ci
+ // val=val-10.0;   //precision de 0.16 (5/31) sur 5 volts au lieus des 0.45 V (14/31)
 
   if(val<0.0)
   {

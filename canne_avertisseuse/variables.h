@@ -10,7 +10,9 @@
 #define GPStimeout 10000 //120000 = 2 minutes
 #define NBsendvie 5 //10sec*5 = 50 sec    nombre de coup d'horloge avant le message de vie
 #define NBreset 2 //10sec*2 = 20 sec      la led reset alumé pandant 20 seconde après l'envoie du message nombre de coup d'horloge avant le reset
-#define LoRatimeout 60000 //1 minute pour recevoir un msg
+
+#define deflatitude "43.522589" //coordonnées par defauts
+#define deflongitude "3.930729"
 
 //---------------------variables---------------------
 //ISRs
@@ -32,7 +34,7 @@ uint8_t nombre = 0 ;
 uint8_t batterie;
 
 //bool SEND_ALL = 0;
-bool alarmOccurredEAUP = false; //
+bool alarmOccurredEAUP = false;
 bool alarmOccurredMOVP = false;
 bool alerte_BATP=false;
 uint8_t NBCLK = 0;   //le reset est impossible, puisque l'on démare l'incrémenation de l'horloge à 1 a chaque boucle 
@@ -61,8 +63,8 @@ const uint8_t PinLEDMMA = 1;
 const uint8_t PinLEDLoRa = 2;
 const uint8_t GPS_EN = 3;
 
-const uint8_t PinLEDEAU = 8;
-const uint8_t PinLEDMOV = 9;
+const uint8_t PinLEDEAU = 9;
+const uint8_t PinLEDMOV = 8;
 const uint8_t PinLEDSENDMSG = 10;
 
 const uint8_t PinLEDAlerteBat = 21; //si la tension de la batterie passe en dessous de seuil_critique alors on alume une led et on n'utilise plus le GPS
