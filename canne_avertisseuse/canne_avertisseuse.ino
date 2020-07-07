@@ -229,7 +229,8 @@ void SENDALL()
  {
   //--------------------------GPS----------------------
    if(alerte != 0 && !delestage){                 //quand on a une alerte=init, il n'y a pas besoins de refaire une recherge puisqu'on vient tout juste d'avoir un fix
-    lectureGPS();                               // si on a plus assé de batterie on n'utilise plus le gps
+// if(alerte != 0){                                //ancienne condition
+      lectureGPS();                               // si on a plus assé de batterie on n'utilise plus le gps
    }
   //  infoGPS();
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 

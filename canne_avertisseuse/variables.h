@@ -8,8 +8,8 @@
 #define alerte_BAT  4
 
 #define GPStimeout 900000 //120000 = 2 minutes
-#define NBsendvie 5 //10sec*5 = 50 sec    nombre de coup d'horloge avant le message de vie
-#define NBreset 2 //10sec*2 = 20 sec      la led reset alumé pandant 20 seconde après l'envoie du message nombre de coup d'horloge avant le reset
+#define NBsendvie 24 //10sec*5 = 50 sec    nombre de coup d'horloge avant le message de vie
+#define NBreset 3 //10sec*2 = 20 sec      la led reset alumé pandant 20 seconde après l'envoie du message nombre de coup d'horloge avant le reset
 
 #define deflatitude "43.522589" //coordonnées par defauts
 #define deflongitude "3.930729"
