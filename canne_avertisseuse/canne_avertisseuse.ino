@@ -126,7 +126,7 @@ void loop()
   
   if(alarmOccurredCLK) {Serial.println("CLK"); alarmOccurredCLK=false; };
   
-  if (millis() - timer >= 5000)
+  if (millis() - timer >= 10000)
 {
   digitalWrite(PinLEDProg,HIGH);
   Serial.println("Millis");
@@ -181,7 +181,7 @@ else if (alarmOccurredMOV == true && alarmOccurredMOVP==false) {      //modifica
   alarmOccurredMOVP = true;
 }
 
-if(tour >= 720)
+if(tour >= 24)
 {
   digitalWrite(PinLEDProg,HIGH);
   SENDVIE();
