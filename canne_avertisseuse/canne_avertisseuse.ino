@@ -234,6 +234,7 @@ void SENDALL()
   buffer[8] = (uint8_t)latitude;
   errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
+  if(errorsendA<0) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
   
   delay(20);
   digitalWrite(PinLEDSENDMSG, LOW);
@@ -245,7 +246,7 @@ void SENDVIE()
   
   batterie=lecture_batt(); //----------------recuperation de la tension batterie-------- 
 
-  if(batterie < seuil_critique) delestage = true; 
+//  if(batterie < seuil_critique) delestage = true; 
   digitalWrite(PinLEDAlerteBat,delestage);
 
   if(batterie < seuil_critique && !alerte_BATP) { //si la batterie est vide et que l'on a pas déja envoyé le message on envoie un message avec le gps sinon on envoie le msg vie 
@@ -265,6 +266,8 @@ void SENDVIE()
     buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
    
     errorsendB =lora.send(buffer, 1); 
+    if(errorsendB<0) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
+    
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
   
     delay(20);
