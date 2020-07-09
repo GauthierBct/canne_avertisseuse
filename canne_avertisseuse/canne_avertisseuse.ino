@@ -37,7 +37,7 @@ void alarmEventCLK(void);
 void setup() {
   
   Serial.begin(9600);
-//  while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
+// while (!Serial) ;             //tant que on n'a pas ouvert le moniteur série le programme ne s'execute pas !!!
   Serial.println("- Serial start");
 
   pinMode(PinLEDProg, OUTPUT);
@@ -234,7 +234,8 @@ void SENDALL()
   buffer[8] = (uint8_t)latitude;
   errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
-  if(errorsendA<0) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
+  if(errorsendA < 1) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
+  lora.info_connect();
   
   delay(20);
   digitalWrite(PinLEDSENDMSG, LOW);
@@ -266,7 +267,7 @@ void SENDVIE()
     buffer[0] = (uint8_t)(alerte << 5) + (uint8_t)(batterie & 0b11111);
    
     errorsendB =lora.send(buffer, 1); 
-    if(errorsendB<0) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
+    if(errorsendB<1) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
     
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
   
