@@ -54,10 +54,11 @@ void Lora_Module::info_connect() {
 
 
 
-bool Lora_Module::send(uint8_t *buffer, int len) {
+int Lora_Module::send(uint8_t *buffer, int len) {
   int err;
   int i;
   i=5;
+  modem.dataRate(0);  //on force a SF12
   modem.beginPacket();
   modem.write(buffer, len);
   err = modem.endPacket(true);

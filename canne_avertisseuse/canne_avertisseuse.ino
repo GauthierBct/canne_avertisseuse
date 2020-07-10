@@ -252,7 +252,8 @@ void SENDALL()
   buffer[8] = (uint8_t)latitude;
   errorsendA = lora.send(buffer, 9);
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendA)); 
-  
+   if(errorsendA < 1) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
+   
   delay(20);
   digitalWrite(PinLEDSENDMSG, LOW);  
 }
@@ -284,6 +285,7 @@ void SENDVIE()
    
     errorsendB =lora.send(buffer, 1); 
 //  Serial.println("Voici le code d'erreur_: " + String(errorsendB)); 
+ if(errorsendB < 1) {digitalWrite(PinLEDLoRa, LOW); }else {digitalWrite(PinLEDLoRa, HIGH);}
   
     delay(20);
     digitalWrite(PinLEDSENDMSG, LOW); 

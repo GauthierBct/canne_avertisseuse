@@ -14,7 +14,7 @@ class Lora_Module {
     void Init();
     void Init_OTAA();
     void Init_ABP();
-    bool send(uint8_t *data, int Size);
+    int send(uint8_t *data, int Size);
     bool receive(uint8_t *data, double temps, int Size);
     void info_connect();
 
